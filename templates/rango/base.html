@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Engel">
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
     <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
@@ -35,10 +35,12 @@
 {#                <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>#}
                 <li><a href="{% url 'add_category' %}">Add a New Category</a></li>
             {% else %}
-{#                <li><a href="{% url 'registration_register' %}">Register Here</a></li>#}
-{#                <li><a href="{% url 'auth_login' %}">Login</a></li>#}
+                <li><a href="{% url 'register' %}">Register Here</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
             {% endif %}
-            <li><a href="{% url 'about' %}">About</a></li>
+              <li><a href="{% url 'register' %}">Register Here</a></li>
+              <li><a href="{% url 'login' %}">Login</a></li>
+              <li><a href="{% url 'about' %}">About</a></li>
           </ul>
         </div>
       </div>
@@ -47,13 +49,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-                {% block side_block %}{% endblock %}
+                {% block side_block %}Side Block{% endblock %}
 
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
            <div>
-                {% block body_block %}{% endblock %}
-                </div>
+                {% block body_block %}Body Block{% endblock %}
+           </div>
         </div>
       </div>
     </div>

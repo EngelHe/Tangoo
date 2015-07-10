@@ -12,7 +12,11 @@ from rango.models import Category
 from rango.models import Page
 from rango.forms import CategoryForm
 from rango.forms import PageForm
+from rango.forms import UserForm
+from rango.forms import UserProfileForm
 from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate, login
+
 
 def index(request):
 
@@ -20,9 +24,52 @@ def index(request):
 	category_list = Category.objects.order_by('-likes')
 	context_dict = {'categories': category_list}
 
-	# context_dict = {'boldmessage': "I am bold font from the context"}
-
 	return render(request, 'rango/index.html', context_dict)
+
+def register(request):
+	registered = False
+	if request.method == 'POST':
+		user_form = UserForm(data=request.POST)
+		profile_form = UserProfileForm(data=request.POST)
+		if user_form.is_valid() and profile_form.is_valid():
+			user = user_form.save()
+
+			# Now we hash the password with the set_password method.
+			# Once hashed, we can update the user object.
+			user.set_password(user.password)
+			user.save()
+
+			profile = profile_form.save(commit=False)
+			profile.user = user
+			# if 'picture' in request.FILES:
+			# 	profile.picture = request.FILES['picture']
+
+			profile.save()
+			registered = True
+		else:
+			print(user_form.errors, profile_form.errors)
+	else:
+		user_form = UserForm()
+		profile_form = UserProfileForm()
+
+	context_dict = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered}
+	return render(request, 'rango/register.html', context_dict)
+
+def login(request):
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		user = authenticate(username=username, password=password)
+		if user:
+			if user.is_active:
+				login(request, user)
+				# TODO use reverse
+				return HttpResponseRedirect('/rango/')
+			else:
+				# TODO use error page
+				return HttpResponse("Your Rango account is disabled.")
+	else:
+		return render(request, 'rango/login.html', {})
 
 def category(request, category_name_slug):
 	context_dict = {}

@@ -1,1 +1,4 @@
 .idea/
+*.pyc
+rango/__pycache__/*.pyc
+rango/migrations/__pycache__/*.pyc
