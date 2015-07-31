@@ -33,6 +33,7 @@ class Page(models.Model):
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	website = models.URLField(blank=True)
+	# TODO 没有做图片上传的功能
 	# picture = models.ImageField(upload_to='profile_images', blank=True)
 
 	def __str__(self):

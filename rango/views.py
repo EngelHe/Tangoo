@@ -1,9 +1,9 @@
-'''
-Copyright (C) 2015 Netease All rights reserved
-Author: hzhexin@corp.netease.com
+"""
+Copyright (C) 2015 Engel All rights reserved
+Author: hexin2tt@aliyun.com
 Date: Tues Jul 7 2015
 Description:
-'''
+"""
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -16,6 +16,8 @@ from rango.forms import UserForm
 from rango.forms import UserProfileForm
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -55,7 +57,7 @@ def register(request):
 	context_dict = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered}
 	return render(request, 'rango/register.html', context_dict)
 
-def login(request):
+def user_login(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
@@ -68,8 +70,16 @@ def login(request):
 			else:
 				# TODO use error page
 				return HttpResponse("Your Rango account is disabled.")
+		else:
+			print("Invalid login details: {0}, {1}".format(username, password))
+			return HttpResponse("Invalid login details supplied.")
 	else:
 		return render(request, 'rango/login.html', {})
+
+@login_required()
+def user_logout(request):
+	logout(request)
+	return HttpResponseRedirect('/rango/')
 
 def category(request, category_name_slug):
 	context_dict = {}
@@ -89,7 +99,7 @@ def category(request, category_name_slug):
 
 	return render(request, 'rango/category.html', context_dict)
 
-
+@login_required()
 def add_category(request):
 	if request.method == 'POST':
 		form = CategoryForm(request.POST)
@@ -114,6 +124,7 @@ def add_category(request):
 	# Render the form with error messages (if any).
 	return render(request, 'rango/add_category.html', {'form': form})
 
+@login_required()
 def add_page(request, category_name_slug):
 	context_dict = {}
 	try:
@@ -145,3 +156,6 @@ def add_page(request, category_name_slug):
 def about(request):
 	return HttpResponse('This is an about page!!<br/><a href="/rango/">Index</a>')
 
+@login_required()
+def restricted(request):
+	return HttpResponse('After login, you can see it')

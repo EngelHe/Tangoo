@@ -1,6 +1,6 @@
 '''
-Copyright (C) 2015 Netease All rights reserved
-Author: hzhexin@corp.netease.com
+Copyright (C) 2015 Engel All rights reserved
+Author: hexin2tt@aliyun.com
 Date: Tues Jul 7 2015
 Description:
 '''
